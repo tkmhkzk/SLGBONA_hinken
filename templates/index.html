@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}検品入力{% endblock %}
+{% block content %}
+<h1 class="page-title">検品データ入力</h1>
+
+<form method="POST" action="{{ url_for('submit') }}" id="inspectForm">
+  <div class="card">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="worker">作業者名</label>
+        <input type="text" id="worker" name="worker" required placeholder="例: 山田 太郎" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="hinban">品番</label>
+        <input type="text" id="hinban" name="hinban" required placeholder="例: ABC-1234" autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">不良種別カウント</h2>
+    <p class="section-hint">該当する不良のボタンをタップして件数を記録してください</p>
+    <div class="defect-grid">
+      {% for defect in defects %}
+      <div class="defect-card">
+        <div class="defect-name">{{ defect }}</div>
+        <div class="counter">
+          <button type="button" class="btn-count btn-minus" onclick="adjust('{{ defect }}', -1)">−</button>
+          <span class="count-display" id="display_{{ loop.index }}">0</span>
+          <button type="button" class="btn-count btn-plus" onclick="adjust('{{ defect }}', 1)">＋</button>
+        </div>
+        <input type="hidden" name="count_{{ defect }}" id="count_{{ loop.index }}" value="0">
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <div class="total-display">合計: <span id="grandTotal">0</span> 件</div>
+    <button type="submit" class="btn-submit" id="submitBtn">登録する</button>
+  </div>
+</form>
+
+<script>
+const counts = {};
+{% for defect in defects %}
+counts["{{ defect }}"] = { index: {{ loop.index }}, value: 0 };
+{% endfor %}
+
+function adjust(defect, delta) {
+  const c = counts[defect];
+  c.value = Math.max(0, c.value + delta);
+  document.getElementById("display_" + c.index).textContent = c.value;
+  document.getElementById("count_" + c.index).value = c.value;
+  updateTotal();
+}
+
+function updateTotal() {
+  let total = 0;
+  for (const key in counts) total += counts[key].value;
+  document.getElementById("grandTotal").textContent = total;
+}
+
+document.getElementById("inspectForm").addEventListener("submit", function(e) {
+  const worker = document.getElementById("worker").value.trim();
+  const hinban = document.getElementById("hinban").value.trim();
+  let total = 0;
+  for (const key in counts) total += counts[key].value;
+
+  if (!worker || !hinban) {
+    e.preventDefault();
+    alert("作業者名と品番を入力してください");
+    return;
+  }
+  if (total === 0) {
+    if (!confirm("件数が0件です。このまま登録しますか？")) {
+      e.preventDefault();
+    }
+  }
+});
+</script>
+{% endblock %}

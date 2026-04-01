@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}集計{% endblock %}
+{% block content %}
+<h1 class="page-title">集計レポート</h1>
+
+<div class="card filter-card">
+  <form method="GET" action="{{ url_for('summary') }}" class="filter-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="date">日付</label>
+        <input type="date" id="date" name="date" value="{{ filter_date }}">
+      </div>
+      <div class="form-group">
+        <label for="worker">作業者</label>
+        <select id="worker" name="worker">
+          <option value="">全員</option>
+          {% for w in workers %}
+          <option value="{{ w }}" {% if w == filter_worker %}selected{% endif %}>{{ w }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="hinban">品番</label>
+        <select id="hinban" name="hinban">
+          <option value="">全品番</option>
+          {% for h in hinbans %}
+          <option value="{{ h }}" {% if h == filter_hinban %}selected{% endif %}>{{ h }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="filter-actions">
+      <button type="submit" class="btn-filter">絞り込む</button>
+      <a href="{{ url_for('summary_csv', date=filter_date) }}" class="btn-csv">CSVダウンロード</a>
+    </div>
+  </form>
+</div>
+
+{% if agg %}
+<div class="card">
+  <h2 class="section-title">作業者別 不良集計</h2>
+  <div class="table-wrapper">
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>作業者</th>
+          {% for d in defect_set %}<th>{{ d }}</th>{% endfor %}
+          <th class="total-col">合計</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for worker, counts in agg.items() %}
+        <tr>
+          <td class="worker-cell">{{ worker }}</td>
+          {% for d in defect_set %}
+          <td class="count-cell">{{ counts.get(d, 0) if counts.get(d, 0) > 0 else "−" }}</td>
+          {% endfor %}
+          <td class="count-cell total-col"><strong>{{ counts.values() | sum }}</strong></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr class="total-row">
+          <td><strong>合計</strong></td>
+          {% for d in defect_set %}
+          <td class="count-cell"><strong>{{ totals.get(d, 0) }}</strong></td>
+          {% endfor %}
+          <td class="count-cell total-col"><strong>{{ totals.values() | sum }}</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <h2 class="section-title">入力ログ</h2>
+  <div class="table-wrapper">
+    <table class="log-table">
+      <thead>
+        <tr>
+          <th>記録日時</th>
+          <th>作業者</th>
+          <th>品番</th>
+          <th>不良種別</th>
+          <th>件数</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in records %}
+        <tr>
+          <td>{{ r.recorded_at }}</td>
+          <td>{{ r.worker }}</td>
+          <td>{{ r.hinban }}</td>
+          <td>{{ r.defect_type }}</td>
+          <td class="count-cell">{{ r.count }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% else %}
+<div class="empty-state">
+  <p>{{ filter_date }} のデータがありません</p>
+  <a href="{{ url_for('index') }}" class="btn-submit">検品データを入力する</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}不良種別設定{% endblock %}
+{% block content %}
+<h1 class="page-title">不良種別の設定</h1>
+
+<div class="card">
+  <h2 class="section-title">新しい不良種別を追加</h2>
+  <form method="POST" class="inline-form">
+    <input type="hidden" name="action" value="add">
+    <input type="text" name="name" placeholder="例: 印字不良" required>
+    <button type="submit" class="btn-add">追加</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2 class="section-title">現在の不良種別</h2>
+  <ul class="defect-list">
+    {% for d in defects %}
+    <li class="defect-item">
+      <span>{{ d.name }}</span>
+      <form method="POST" style="display:inline;" onsubmit="return confirm('「{{ d.name }}」を削除しますか？')">
+        <input type="hidden" name="action" value="delete">
+        <input type="hidden" name="id" value="{{ d.id }}">
+        <button type="submit" class="btn-delete">削除</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
