@@ -4,6 +4,30 @@
 <h1 class="page-title">QRコード一覧</h1>
 <p style="color:#666; margin-bottom:1.25rem; font-size:0.95rem;">スマートフォンのカメラでQRコードを読み込んでください</p>
 
+<div class="card">
+  <form method="GET" action="{{ url_for('qr_page') }}" class="qr-ip-form">
+    <div class="form-group" style="flex:1; min-width:180px;">
+      <label>サーバーのIPアドレス</label>
+      <select name="ip" onchange="this.form.submit()">
+        {% for ip in ips %}
+        <option value="{{ ip }}" {% if ip == selected_ip %}selected{% endif %}>{{ ip }}</option>
+        {% endfor %}
+        <option value="__custom__" {% if selected_ip not in ips %}selected{% endif %}>手動入力...</option>
+      </select>
+    </div>
+    <div class="form-group" style="flex:1; min-width:180px;">
+      <label>手動でIPを入力</label>
+      <input type="text" name="ip" placeholder="例: 192.168.1.10"
+             value="{{ selected_ip if selected_ip not in ips else '' }}"
+             oninput="this.form.querySelector('select').value='__custom__'">
+    </div>
+    <div style="display:flex; align-items:flex-end;">
+      <button type="submit" class="btn-filter">QRを更新</button>
+    </div>
+  </form>
+  <p class="section-hint" style="margin-top:0.75rem;">QRコードに反映されているURL: <strong>{{ base }}</strong></p>
+</div>
+
 <div class="qr-grid">
   {% for p in pages %}
   <div class="card qr-card">

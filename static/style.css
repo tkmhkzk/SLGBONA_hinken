@@ -436,6 +436,14 @@ body {
   }
 }
 
+/* QR ip form */
+.qr-ip-form {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
 /* QR page */
 .qr-grid {
   display: grid;

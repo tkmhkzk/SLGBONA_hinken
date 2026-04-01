@@ -189,15 +189,23 @@ def manage_defects():
     return render_template("defects.html", defects=defects)
 
 
-def get_local_ip():
+def get_local_ips():
+    ips = set()
+    try:
+        for info in socket.getaddrinfo(socket.gethostname(), None):
+            addr = info[4][0]
+            if addr.startswith("192.") or addr.startswith("10.") or addr.startswith("172."):
+                ips.add(addr)
+    except Exception:
+        pass
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
-        ip = s.getsockname()[0]
+        ips.add(s.getsockname()[0])
         s.close()
-        return ip
     except Exception:
-        return "127.0.0.1"
+        pass
+    return sorted(ips) or ["127.0.0.1"]
 
 
 def make_qr_base64(url):
@@ -209,16 +217,17 @@ def make_qr_base64(url):
 
 @app.route("/qr")
 def qr_page():
-    ip = get_local_ip()
+    ips = get_local_ips()
     port = 5000
-    base = f"http://{ip}:{port}"
+    selected_ip = request.args.get("ip", ips[0])
+    base = f"http://{selected_ip}:{port}"
     pages = [
         {"label": "検品入力", "url": base + "/"},
         {"label": "集計", "url": base + "/summary"},
     ]
     for p in pages:
         p["qr"] = make_qr_base64(p["url"])
-    return render_template("qr.html", pages=pages, base=base)
+    return render_template("qr.html", pages=pages, base=base, ips=ips, selected_ip=selected_ip, port=port)
 
 
 if __name__ == "__main__":
