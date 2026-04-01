@@ -1,6 +1,9 @@
 import sqlite3
 import csv
 import io
+import socket
+import base64
+import qrcode
 from datetime import datetime, date
 from flask import Flask, render_template, request, redirect, url_for, jsonify, Response
 
@@ -184,6 +187,38 @@ def manage_defects():
                     conn.commit()
         defects = conn.execute("SELECT * FROM defect_types ORDER BY id").fetchall()
     return render_template("defects.html", defects=defects)
+
+
+def get_local_ip():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "127.0.0.1"
+
+
+def make_qr_base64(url):
+    img = qrcode.make(url)
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return base64.b64encode(buf.getvalue()).decode()
+
+
+@app.route("/qr")
+def qr_page():
+    ip = get_local_ip()
+    port = 5000
+    base = f"http://{ip}:{port}"
+    pages = [
+        {"label": "検品入力", "url": base + "/"},
+        {"label": "集計", "url": base + "/summary"},
+    ]
+    for p in pages:
+        p["qr"] = make_qr_base64(p["url"])
+    return render_template("qr.html", pages=pages, base=base)
 
 
 if __name__ == "__main__":

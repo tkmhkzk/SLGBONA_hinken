@@ -435,3 +435,37 @@ body {
     text-align: center;
   }
 }
+
+/* QR page */
+.qr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.qr-card {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.qr-label {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1a1a2e;
+}
+
+.qr-img {
+  width: 200px;
+  height: 200px;
+  display: block;
+  margin: 0 auto 1rem;
+  border: 1px solid #e8eaf0;
+  border-radius: 6px;
+}
+
+.qr-url {
+  font-size: 0.8rem;
+  color: #888;
+  word-break: break-all;
+}

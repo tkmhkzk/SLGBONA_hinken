@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}QRコード{% endblock %}
+{% block content %}
+<h1 class="page-title">QRコード一覧</h1>
+<p style="color:#666; margin-bottom:1.25rem; font-size:0.95rem;">スマートフォンのカメラでQRコードを読み込んでください</p>
+
+<div class="qr-grid">
+  {% for p in pages %}
+  <div class="card qr-card">
+    <div class="qr-label">{{ p.label }}</div>
+    <img src="data:image/png;base64,{{ p.qr }}" alt="{{ p.label }} QRコード" class="qr-img">
+    <div class="qr-url">{{ p.url }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
