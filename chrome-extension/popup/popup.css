@@ -1,0 +1,254 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  background: #f0f2f5;
+  color: #333;
+  width: 340px;
+  min-height: 100px;
+  font-size: 13px;
+}
+
+/* ────────── ヘッダー ────────── */
+.header {
+  background: #fff;
+  border-bottom: 1px solid #e8eaf0;
+  padding: 10px 14px;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  color: #1a56db;
+}
+
+/* ────────── ビュー共通 ────────── */
+.view {
+  padding: 14px;
+}
+
+.section {
+  margin-bottom: 12px;
+}
+
+.field-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 5px;
+  letter-spacing: 0.03em;
+}
+
+.text-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #333;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.text-input:focus {
+  border-color: #1a56db;
+  box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.12);
+}
+
+/* ────────── ボタン ────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.btn:active {
+  opacity: 0.85;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-primary {
+  background: #1a56db;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #1446b8;
+}
+
+.btn-secondary {
+  background: #e8edf8;
+  color: #1a56db;
+  flex: 1;
+}
+
+.btn-secondary:hover {
+  background: #d5dff5;
+}
+
+.btn-danger-outline {
+  background: transparent;
+  color: #dc2626;
+  border: 1px solid #dc2626;
+}
+
+.btn-danger-outline:hover {
+  background: #fef2f2;
+}
+
+.btn-stop {
+  background: #dc2626;
+  color: #fff;
+}
+
+.btn-stop:hover {
+  background: #b91c1c;
+}
+
+/* ────────── 前回の記録 ────────── */
+.previous-session {
+  margin-top: 14px;
+}
+
+.divider-label {
+  font-size: 11px;
+  color: #888;
+  text-align: center;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.divider-label::before,
+.divider-label::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 38%;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.divider-label::before { left: 0; }
+.divider-label::after  { right: 0; }
+
+.prev-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.prev-title {
+  font-size: 12px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.prev-count {
+  font-size: 12px;
+  color: #1a56db;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.prev-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ────────── 記録中ビュー ────────── */
+.recording-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.recording-dot {
+  width: 10px;
+  height: 10px;
+  background: #dc2626;
+  border-radius: 50%;
+  animation: pulse 1.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.75); }
+}
+
+.recording-label {
+  font-weight: 700;
+  color: #dc2626;
+  font-size: 13px;
+}
+
+.recording-title {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.step-info {
+  background: #fff;
+  border: 1px solid #e8eaf0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+
+.step-count-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.step-count-label {
+  font-size: 11px;
+  color: #777;
+}
+
+.step-count-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a56db;
+}
+
+.last-step {
+  font-size: 11px;
+  color: #555;
+  min-height: 14px;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

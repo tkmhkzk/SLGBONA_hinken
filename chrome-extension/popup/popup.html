@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>操作マニュアル自動生成</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="header">
+    <div class="header-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a56db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <polyline points="10 9 9 9 8 9"/>
+      </svg>
+      <span>操作マニュアル自動生成</span>
+    </div>
+  </div>
+
+  <!-- アイドル状態 -->
+  <div id="view-idle" class="view">
+    <div class="section">
+      <label class="field-label" for="manual-title">マニュアルのタイトル</label>
+      <input
+        type="text"
+        id="manual-title"
+        class="text-input"
+        placeholder="例: 検品データ入力の操作手順"
+        maxlength="60"
+      >
+    </div>
+
+    <button id="btn-start" class="btn btn-primary btn-block">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="12" cy="12" r="8" fill="#dc2626"/>
+      </svg>
+      記録を開始する
+    </button>
+
+    <div id="previous-session" class="previous-session" style="display:none">
+      <div class="divider-label">前回の記録</div>
+      <div class="prev-info">
+        <span id="prev-title" class="prev-title"></span>
+        <span id="prev-count" class="prev-count"></span>
+      </div>
+      <div class="prev-actions">
+        <button id="btn-preview-prev" class="btn btn-secondary">プレビュー / エクスポート</button>
+        <button id="btn-clear" class="btn btn-danger-outline">クリア</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 記録中状態 -->
+  <div id="view-recording" class="view" style="display:none">
+    <div class="recording-indicator">
+      <span class="recording-dot"></span>
+      <span class="recording-label">記録中...</span>
+    </div>
+    <div id="recording-title" class="recording-title"></div>
+
+    <div class="step-info">
+      <div class="step-count-row">
+        <span class="step-count-label">記録済みステップ</span>
+        <span id="step-count" class="step-count-value">0</span>
+      </div>
+      <div id="last-step" class="last-step"></div>
+    </div>
+
+    <button id="btn-stop" class="btn btn-stop btn-block">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <rect x="3" y="3" width="18" height="18" rx="2" fill="white"/>
+      </svg>
+      記録を停止する
+    </button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>マニュアルプレビュー</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: #f0f2f5;
+      color: #333;
+      min-height: 100vh;
+    }
+
+    /* ────────── ヘッダー ────────── */
+    .top-bar {
+      background: #fff;
+      border-bottom: 1px solid #e8eaf0;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .top-bar-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #1a56db;
+    }
+
+    .top-bar-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-primary { background: #1a56db; color: #fff; }
+    .btn-primary:hover { background: #1446b8; }
+    .btn-secondary { background: #e8edf8; color: #1a56db; }
+    .btn-secondary:hover { background: #d5dff5; }
+    .btn-danger { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .btn-danger:hover { background: #fee2e2; }
+
+    /* ────────── メインコンテンツ ────────── */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 20px;
+    }
+
+    /* ────────── マニュアルヘッダー ────────── */
+    .manual-header {
+      background: #fff;
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      border: 1px solid #e8eaf0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .manual-header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a56db;
+      margin-bottom: 6px;
+    }
+
+    .manual-meta {
+      font-size: 12px;
+      color: #777;
+    }
+
+    /* ────────── 空状態 ────────── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #888;
+    }
+
+    .empty-state svg {
+      margin-bottom: 16px;
+      opacity: 0.4;
+    }
+
+    .empty-state h2 {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #555;
+    }
+
+    .empty-state p {
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* ────────── ステップカード ────────── */
+    .step {
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid #e8eaf0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 20px;
+      border-bottom: 1px solid #f0f2f5;
+    }
+
+    .step-number {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #1a56db;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-description {
+      font-size: 14px;
+      font-weight: 600;
+      color: #222;
+      line-height: 1.5;
+      padding-top: 4px;
+    }
+
+    .step-screenshot {
+      width: 100%;
+      display: block;
+      background: #f8f9fa;
+    }
+
+    .step-screenshot img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .step-footer {
+      padding: 8px 20px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #999;
+      background: #fafbfc;
+      gap: 12px;
+    }
+
+    .step-url {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 75%;
+    }
+
+    .step-time {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ────────── ローディング ────────── */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: #888;
+      font-size: 14px;
+    }
+
+    /* ────────── トースト通知 ────────── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1a56db;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+      z-index: 200;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.success { background: #16a34a; }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="top-bar-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a56db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+      操作マニュアル自動生成
+    </div>
+    <div class="top-bar-actions">
+      <button id="btn-copy-md" class="btn btn-secondary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Markdownをコピー
+      </button>
+      <button id="btn-export-html" class="btn btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        HTMLでエクスポート
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div id="content">
+      <div class="loading">データを読み込み中...</div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="preview.js"></script>
+</body>
+</html>
